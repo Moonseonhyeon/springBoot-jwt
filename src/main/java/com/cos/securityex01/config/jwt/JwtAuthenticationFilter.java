@@ -14,7 +14,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.cos.securityex01.config.auth.PrincipalDetails;
 import com.cos.securityex01.dto.LoginRequestDto;
+import com.cos.securityex01.model.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -53,7 +55,13 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		//credentials = 비밀번호
 		UsernamePasswordAuthenticationToken authenticationToken = 
 				new UsernamePasswordAuthenticationToken(loginRequestDto.getUsername(), loginRequestDto.getPassword());
-		System.out.println("UsernamePasswordAuthenticationToken" +authenticationToken );
+		System.out.println("UsernamePasswordAuthenticationToken : " +authenticationToken );
+		System.out.println("Name : "+ authenticationToken.getName());
+		System.out.println("Credentials : "+ authenticationToken.getCredentials());
+		System.out.println("Details : "+ authenticationToken.getDetails());
+		System.out.println("Principal : "+ authenticationToken.getPrincipal());
+		System.out.println("Authorities : "+ authenticationToken.getAuthorities());
+		System.out.println("Class : "+ authenticationToken.getClass());
 		//authenticate함수가 호출되면 인증 프로바이더가 유저 디테일 서비스의
 		//loadUserByUsername(토큰의 첫번째 파라메터)를 호출하고
 		//UserDetials를 리턴받아서 토큰의 두번째 파라메터(credential)과 -> 사용자로부터 받은값
@@ -65,7 +73,9 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		//결론은 인증프로바이더에게 알려줄 필요 없음.
 		Authentication authentication = 		
 				authenticationManager.authenticate(authenticationToken); //provider의 일을 위임하고 있음.
-		System.out.println("Authentication : "+ authentication.getPrincipal());
+		
+		PrincipalDetails principal = (PrincipalDetails) authentication.getPrincipal();
+		System.out.println("Authentication : "+ principal.getUser().getUsername());
 		return authentication;
 	}
 
