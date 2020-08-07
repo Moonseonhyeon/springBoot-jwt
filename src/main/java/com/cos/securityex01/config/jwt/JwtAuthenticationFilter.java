@@ -2,6 +2,7 @@ package com.cos.securityex01.config.jwt;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -14,6 +15,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
 import com.cos.securityex01.config.auth.PrincipalDetails;
 import com.cos.securityex01.dto.LoginRequestDto;
 import com.cos.securityex01.model.User;
@@ -85,7 +88,25 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
 			Authentication authResult) throws IOException, ServletException {
 		
-		super.successfulAuthentication(request, response, chain, authResult);
+		PrincipalDetails principalDetails = (PrincipalDetails) authResult.getPrincipal();
+		
+		/*
+		 * String jwtToken = JWT.create() .withSubject(principalDetails.getUsername())
+		 * //sub .withExpiresAt(new Date(System.currentTimeMillis()+864000000)) //만료시간
+		 * 10일 .withClaim("id", principalDetails.getUser().getId()) // 비공개 클레임
+		 * .withClaim("username", principalDetails.getUser().getUsername())
+		 * .sign(Algorithm.HMAC512("조익현".getBytes()));
+		 */
+		
+		String jwtToken = JWT.create()
+				.withSubject(principalDetails.getUsername())//sub
+				.withExpiresAt(new Date(System.currentTimeMillis()+864000000/10))//만료시간 10->1일
+				.withClaim("id", principalDetails.getUser().getId())//PK 비공개클레임
+				.withClaim("username", principalDetails.getUser().getUsername())
+				.sign(Algorithm.HMAC512("펭귄악어".getBytes()));//getBytes하면 조금더 ?
+				
+		response.addHeader("Authorization", "Bearer "+jwtToken);//헤더
+		
 	}
 	
 

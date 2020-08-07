@@ -43,9 +43,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{ //Adapter인 �
 				.addFilter(new JwtAuthenticationFilter(authenticationManager()))//내가 만든 인증 필터 
 				//.addFilter(null) // -> 권한처리 
 				.authorizeRequests()
-				.antMatchers("/api/v1/manager/**").access("hasRole('ROLE_MANAGER')  or hasRole('ROLE_ADMIN')")
+				.antMatchers("/api/v1/manager/**").access("hasRole('ROLE_MANAGER')  or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
 				.antMatchers("/api/v1/admin/**").access("hasRole('ROLE_ADMIN')")
-				.anyRequest().permitAll()
+				.anyRequest().permitAll();
 			/*.and()
 				.exceptionHandling()
 				.accessDeniedHandler(new AccessDeniedHandler() {
@@ -58,10 +58,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{ //Adapter인 �
 						out.flush();						
 					}
 				})
-				.accessDeniedPage("/auth/login");	*/	
+				.accessDeniedPage("/auth/login");		*/
 	}
-
-
-	
 	
 }
