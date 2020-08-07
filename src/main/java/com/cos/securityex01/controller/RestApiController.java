@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cos.securityex01.model.User;
-
 import lombok.RequiredArgsConstructor;
 
 @RestController
