@@ -31,7 +31,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
 			throws AuthenticationException {
-		System.out.println("attemptAuthentication");
+		System.out.println("JwtAuthenticationFilter : attemptAuthentication");
 		
 		//request에 있는 username과 password를 파싱해서 자바 오브젝트로 받기
 		ObjectMapper om = new ObjectMapper(); //gson쓸 필요가 없네! 
@@ -43,6 +43,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 			//블로그에 ObjectMapper에 대한 정리
 			//Username password가 저장됨
 			loginRequestDto = om.readValue(request.getInputStream(), LoginRequestDto.class);
+			System.out.println("Dto : " +loginRequestDto );
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -52,7 +53,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		//credentials = 비밀번호
 		UsernamePasswordAuthenticationToken authenticationToken = 
 				new UsernamePasswordAuthenticationToken(loginRequestDto.getUsername(), loginRequestDto.getPassword());
-		
+		System.out.println("UsernamePasswordAuthenticationToken" +authenticationToken );
 		//authenticate함수가 호출되면 인증 프로바이더가 유저 디테일 서비스의
 		//loadUserByUsername(토큰의 첫번째 파라메터)를 호출하고
 		//UserDetials를 리턴받아서 토큰의 두번째 파라메터(credential)과 -> 사용자로부터 받은값
@@ -64,7 +65,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		//결론은 인증프로바이더에게 알려줄 필요 없음.
 		Authentication authentication = 		
 				authenticationManager.authenticate(authenticationToken); //provider의 일을 위임하고 있음.
-		
+		System.out.println("Authentication : "+ authentication.getPrincipal());
 		return authentication;
 	}
 

@@ -32,7 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{ //Adapter인 �
 				.formLogin().disable()
 				.httpBasic().disable() // jsessionId안쓸거다. 그럼 어떻게 로그인함? jwt로!
 				.addFilter(new JwtAuthenticationFilter(authenticationManager()))//내가 만든 인증 필터 
-				//.addFilter(null)
+				//.addFilter(null) // -> 권한처리 
 				.authorizeRequests()
 				.antMatchers("/api/v1/manager/**").access("hasRole('ROLE_MANAGER')  or hasRole('ROLE_ADMIN')")
 				.antMatchers("/api/v1/admin/**").access("hasRole('ROLE_ADMIN')")
