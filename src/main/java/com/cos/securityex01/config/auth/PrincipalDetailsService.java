@@ -21,7 +21,11 @@ public class PrincipalDetailsService implements UserDetailsService{
 		User user = userRepository.findByUsername(username);
 		// 못찾은거는 Exception를 던질텐데 내가 잡아서 Global~~로 처리해주면 된다.
 		System.out.println("user : " + user);
-			return new PrincipalDetails(user);
+		
+		//session.setAttribute("loginUser", user);
+			return new PrincipalDetails(user); //@AuthenticationPrincipal로 꺼내쓰게 되어있다.
+			
+			//세션 2개이고 로그아웃할 때 invalidation할건데 그럼 다 사라지니까 상관없다.
 		
 	}
 

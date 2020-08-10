@@ -2,6 +2,9 @@ package com.cos.securityex01.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cos.securityex01.config.auth.PrincipalDetails;
+import com.cos.securityex01.config.auth.SessionUser;
 import com.cos.securityex01.model.User;
 import com.cos.securityex01.repository.UserRepository;
 
@@ -50,7 +55,19 @@ public class RestApiController {
 		user.setRoles("ROLE_USER");
 		userRepository.save(user);
 		return "회원가입 완료";
-
-		}
+	}
+		//권한을 확인하기 위해서 principalDetails에서 꺼내서 권한 확인을 해야한다.
+	@GetMapping("user")
+	public String user(Authentication authentication) {
+		/*
+		 * PrincipalDetails principal = (PrincipalDetails)
+		 * authentication.getPrincipal(); System.out.println("principal : "+
+		 * principal.getUser().getId()); System.out.println("princicpal : "+
+		 * principal.getUser().getUsername()); System.out.println("princicpal : "+
+		 * principal.getUser().getRoles());
+		 */
+		return "<h1>user</h1>";
+	}
+				
 	}
 

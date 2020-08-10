@@ -100,14 +100,13 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		
 		String jwtToken = JWT.create()
 				.withSubject(principalDetails.getUsername())//sub
-				.withExpiresAt(new Date(System.currentTimeMillis()+864000000/10))//만료시간 10->1일
+				.withExpiresAt(new Date(System.currentTimeMillis()+JwtProperties.EXPIRATION_TIME))//만료시간 지금으로부터 10일
 				.withClaim("id", principalDetails.getUser().getId())//PK 비공개클레임
 				.withClaim("username", principalDetails.getUser().getUsername())
-				.sign(Algorithm.HMAC512("펭귄악어".getBytes()));//getBytes하면 조금더 ?
+				.sign(Algorithm.HMAC512(JwtProperties.SECRET));//getBytes하면 조금 더 보안이 철저해진다.
 				
-		response.addHeader("Authorization", "Bearer "+jwtToken);//헤더
+		response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_REFIX + jwtToken);//헤더
 		
 	}
-	
 
 }
